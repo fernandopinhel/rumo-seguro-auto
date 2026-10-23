@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#7a2160">
+    <meta name="description" content="Case de UX/UI: cotação e contratação de seguro auto em conversa, dentro do app de uma operadora, numa parceria fictícia entre a Rumo Seguros e a onda.">
+    <title>Início | Rumo Auto</title>
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&amp;display=swap">
+    <link rel="stylesheet" href="css/app.css">
+  </head>
+  <body>
+    <a class="skip-link" id="pular" href="#entrada-conteudo">Pular para o conteúdo</a>
+
+    <!-- ============================================================ ENTRADA -->
+    <div class="entrada" id="tela-entrada">
+      <div class="entrada__cena" aria-hidden="true">
+        <span class="cena__sol"></span>
+        <span class="cena__morros"></span>
+        <span class="cena__estrada"><span class="cena__faixas"></span></span>
+      </div>
+
+      <header class="entrada__topo">
+        <span class="marca marca--clara">
+          <img class="marca__simbolo" src="img/favicon.svg" alt="" width="32" height="32">
+          <span class="marca__nome">Rumo <span class="marca__sub">Auto</span></span>
+        </span>
+        <span class="case-tag">Case de UX/UI · 2020</span>
+        <span class="avatar" aria-hidden="true" id="avatar-entrada">MD</span>
+      </header>
+
+      <main class="entrada__conteudo" id="entrada-conteudo" tabindex="-1">
+        <h1 class="entrada__saudacao"><span id="saudacao">Olá</span>, <span class="entrada__nome" id="nome-entrada">Marina</span>.</h1>
+        <p class="entrada__lead">Seu carro protegido em poucos minutos, sem sair do app da onda.</p>
+
+        <section class="vitrine" aria-labelledby="titulo-cotacoes">
+          <h2 class="vitrine__titulo" id="titulo-cotacoes">Minhas cotações</h2>
+          <ul class="blocos" id="lista-cotacoes">
+            <li class="blocos__item">
+              <button class="bloco bloco--novo" type="button" id="nova-cotacao">
+                <span class="bloco__icone bloco__icone--mais"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-mais"/></svg></span>
+                <span class="bloco__texto">
+                  <span class="bloco__titulo">Fazer nova cotação</span>
+                  <span class="bloco__meta">Leva uns 4 minutos</span>
+                </span>
+              </button>
+            </li>
+          </ul>
+        </section>
+
+        <section class="vitrine" aria-labelledby="titulo-apolices">
+          <h2 class="vitrine__titulo" id="titulo-apolices">Minhas apólices</h2>
+          <ul class="blocos" id="lista-apolices"></ul>
+        </section>
+      </main>
+
+      <footer class="entrada__rodape">
+        <span class="parceria">
+          <span class="parceria__rotulo">Em parceria com</span>
+          <span class="onda onda--clara"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-onda"/></svg>onda</span>
+        </span>
+        <p class="entrada__aviso">Marcas, pessoas e valores fictícios. Nada do que você digitar sai do seu navegador.</p>
+      </footer>
+    </div>
+
+    <!-- ============================================================ FLUXO -->
+    <div class="fluxo" id="tela-fluxo" hidden>
+      <header class="topo">
+        <div class="topo__faixa" aria-hidden="true"></div>
+        <div class="topo__marca">
+          <img class="marca__simbolo" src="img/favicon.svg" alt="" width="30" height="30">
+          <span class="marca__nome">Rumo <span class="marca__sub">Auto</span></span>
+        </div>
+
+        <nav class="estrada" aria-label="Etapas da cotação">
+          <div class="estrada__pista" aria-hidden="true">
+            <span class="estrada__percorrida" id="percorrida"></span>
+            <span class="carrinho" id="carrinho">
+              <svg viewBox="0 0 44 24" width="44" height="24" focusable="false">
+                <path class="carrinho__fumaca" d="M2 17h4M0 13h3" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+                <path d="M8 16v-4.5c0-1 .6-1.8 1.5-2.1L14 8l4.4-4.2A3 3 0 0 1 20.5 3h8.8a3 3 0 0 1 2.3 1.1L35 8.4l4.4 1.2c1 .3 1.6 1.2 1.6 2.2V16a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1z" fill="#fff"/>
+                <path d="M17.5 8l3.3-3.3c.3-.3.6-.4 1-.4h3.7V8zM27.5 8V4.3h1.9c.4 0 .8.2 1 .5L32.7 8z" fill="#6a2f97"/>
+                <circle cx="38.6" cy="11.6" r="1.3" fill="#ffab2e"/>
+                <g class="carrinho__roda"><circle cx="15" cy="17.5" r="4" fill="#2a2140"/><path d="M15 14.5v6M12 17.5h6" stroke="#fff" stroke-width="1.2"/></g>
+                <g class="carrinho__roda"><circle cx="33" cy="17.5" r="4" fill="#2a2140"/><path d="M33 14.5v6M30 17.5h6" stroke="#fff" stroke-width="1.2"/></g>
+              </svg>
+            </span>
+          </div>
+          <ol class="estrada__etapas" id="paradas">
+            <li><button class="parada" type="button" data-ir="cliente"><span class="parada__ponto" aria-hidden="true"><svg class="icon" focusable="false"><use href="img/icons.svg#i-check"/></svg></span><span class="parada__rotulo">Você</span><span class="parada__estado visually-hidden"></span></button></li>
+            <li><button class="parada" type="button" data-ir="veiculo"><span class="parada__ponto" aria-hidden="true"><svg class="icon" focusable="false"><use href="img/icons.svg#i-check"/></svg></span><span class="parada__rotulo">Veículo</span><span class="parada__estado visually-hidden"></span></button></li>
+            <li><button class="parada" type="button" data-ir="cotacao"><span class="parada__ponto" aria-hidden="true"><svg class="icon" focusable="false"><use href="img/icons.svg#i-check"/></svg></span><span class="parada__rotulo">Cotação</span><span class="parada__estado visually-hidden"></span></button></li>
+            <li><button class="parada" type="button" data-ir="confirmacao"><span class="parada__ponto" aria-hidden="true"><svg class="icon" focusable="false"><use href="img/icons.svg#i-check"/></svg></span><span class="parada__rotulo">Confirmação</span><span class="parada__estado visually-hidden"></span></button></li>
+            <li><button class="parada" type="button" data-ir="pagamento"><span class="parada__ponto" aria-hidden="true"><svg class="icon" focusable="false"><use href="img/icons.svg#i-check"/></svg></span><span class="parada__rotulo">Pagamento</span><span class="parada__estado visually-hidden"></span></button></li>
+          </ol>
+        </nav>
+
+        <div class="topo__conta">
+          <span class="avatar avatar--claro" aria-hidden="true" id="avatar-fluxo">MD</span>
+          <button class="btn-sair" type="button" id="sair-fluxo">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-sair"/></svg>
+            <span>Sair<span class="visually-hidden"> da cotação e voltar ao início</span></span>
+          </button>
+        </div>
+      </header>
+
+      <main class="principal" id="conteudo" tabindex="-1">
+      <div class="subtopo">
+        <div class="subtopo__linha">
+          <h1 class="subtopo__titulo" id="titulo-etapa" tabindex="-1">Sobre você</h1>
+          <p class="contador" id="contador"><span class="contador__texto" id="contador-texto">0 de 7</span><svg class="icon contador__check" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-check"/></svg></p>
+        </div>
+        <div class="contador__barra" aria-hidden="true"><span id="contador-barra"></span></div>
+      </div>
+
+      <div class="palco">
+        <button class="btn-exemplo" type="button" id="preencher-exemplo">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-editar"/></svg>
+          Preencher esta etapa com dados de exemplo
+        </button>
+
+        <!-- ------------------------------------------------ ETAPA 1: VOCÊ -->
+        <section class="etapa" data-etapa="cliente" aria-labelledby="titulo-etapa">
+          <ol class="fio">
+            <li class="pergunta" data-p="contato">
+              <div class="pergunta__resumo">
+                <span class="pergunta__rotulo">Contato</span>
+                <span class="pergunta__resposta"></span>
+                <button class="link-alterar" type="button" data-alterar="contato"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-editar"/></svg>Alterar<span class="visually-hidden"> contato</span></button>
+              </div>
+              <form class="cartao" novalidate>
+                <img class="cartao__ilustra" src="img/ilustracoes/pessoa.svg" alt="" width="160" height="160">
+                <fieldset class="cartao__corpo">
+                  <legend class="cartao__legenda"><span class="cartao__pergunta" tabindex="-1">Pra começar, como a gente fala com você?</span></legend>
+                  <div class="campo">
+                    <label class="campo__rotulo" for="nome">Nome completo</label>
+                    <input class="campo__input" id="nome" name="nome" type="text" autocomplete="name" data-nome="o nome completo">
+                    <p class="campo__erro" id="nome-erro" hidden></p>
+                  </div>
+                  <div class="grade-2">
+                    <div class="campo">
+                      <label class="campo__rotulo" for="telefone">Celular com DDD</label>
+                      <input class="campo__input" id="telefone" name="telefone" type="tel" inputmode="tel" autocomplete="tel-national" data-mascara="telefone" maxlength="15">
+                      <p class="campo__erro" id="telefone-erro" hidden></p>
+                    </div>
+                    <div class="campo">
+                      <label class="campo__rotulo" for="email">E-mail</label>
+                      <input class="campo__input" id="email" name="email" type="email" autocomplete="email" spellcheck="false">
+                      <p class="campo__erro" id="email-erro" hidden></p>
+                    </div>
+                  </div>
+                  <p class="dica">A cotação e a apólice chegam por e-mail. Não mandamos propaganda.</p>
+                  <div class="cartao__acoes"><button class="btn btn--ok" type="submit">Continuar<svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-dir"/></svg></button></div>
+                </fieldset>
+              </form>
+            </li>
+
+            <li class="pergunta" data-p="estadoCivil">
+              <div class="pergunta__resumo">
+                <span class="pergunta__rotulo">Estado civil</span>
+                <span class="pergunta__resposta"></span>
+                <button class="link-alterar" type="button" data-alterar="estadoCivil"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-editar"/></svg>Alterar<span class="visually-hidden"> estado civil</span></button>
+              </div>
+              <form class="cartao" novalidate>
+                <img class="cartao__ilustra" src="img/ilustracoes/aliancas.svg" alt="" width="160" height="160">
+                <fieldset class="cartao__corpo" aria-describedby="estadoCivil-erro">
+                  <legend class="cartao__legenda"><span class="cartao__pergunta" tabindex="-1"><span class="destaque" data-primeiro-nome>Você</span>, qual é o seu estado civil?</span></legend>
+                  <div class="opcoes opcoes--2">
+                    <label class="opcao"><input type="radio" name="estadoCivil" value="solteira"><span class="opcao__caixa">Solteiro(a)</span></label>
+                    <label class="opcao"><input type="radio" name="estadoCivil" value="casada"><span class="opcao__caixa">Casado(a) ou união estável</span></label>
+                    <label class="opcao"><input type="radio" name="estadoCivil" value="divorciada"><span class="opcao__caixa">Divorciado(a)</span></label>
+                    <label class="opcao"><input type="radio" name="estadoCivil" value="viuva"><span class="opcao__caixa">Viúvo(a)</span></label>
+                  </div>
+                  <p class="campo__erro" id="estadoCivil-erro" hidden></p>
+                  <div class="cartao__acoes"><button class="btn btn--ok" type="submit">Continuar<svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-dir"/></svg></button></div>
+                </fieldset>
+              </form>
+            </li>
+
+            <li class="pergunta" data-p="nascimento">
+              <div class="pergunta__resumo">
+                <span class="pergunta__rotulo">Nascimento</span>
+                <span class="pergunta__resposta"></span>
+                <button class="link-alterar" type="button" data-alterar="nascimento"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-editar"/></svg>Alterar<span class="visually-hidden"> data de nascimento</span></button>
+              </div>
+              <form class="cartao" novalidate>
+                <img class="cartao__ilustra" src="img/ilustracoes/bolo.svg" alt="" width="160" height="160">
+                <fieldset class="cartao__corpo">
+                  <legend class="cartao__legenda"><span class="cartao__pergunta" tabindex="-1">Qual é a sua <span class="destaque">data de nascimento</span>?</span></legend>
+                  <div class="campo campo--curto">
+                    <label class="campo__rotulo" for="nascimento">Data de nascimento <span class="campo__formato">(dia/mês/ano)</span></label>
+                    <input class="campo__input" id="nascimento" name="nascimento" type="text" inputmode="numeric" autocomplete="bday" data-mascara="data" maxlength="10" placeholder="dd/mm/aaaa">
+                    <p class="campo__erro" id="nascimento-erro" hidden></p>
+                  </div>
+                  <div class="cartao__acoes"><button class="btn btn--ok" type="submit">Continuar<svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-dir"/></svg></button></div>
+                </fieldset>
+              </form>
+            </li>
+
+            <li class="pergunta" data-p="sexo">
+              <div class="pergunta__resumo">
+                <span class="pergunta__rotulo">Sexo</span>
+                <span class="pergunta__resposta"></span>
+                <button class="link-alterar" type="button" data-alterar="sexo"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-editar"/></svg>Alterar<span class="visually-hidden"> sexo</span></button>
+              </div>
+              <form class="cartao" novalidate>
+                <img class="cartao__ilustra" src="img/ilustracoes/documento.svg" alt="" width="160" height="160">
+                <fieldset class="cartao__corpo" aria-describedby="sexo-dica sexo-erro">
+                  <legend class="cartao__legenda"><span class="cartao__pergunta" tabindex="-1">Qual sexo aparece no seu documento?</span></legend>
+                  <p class="dica" id="sexo-dica">As seguradoras ainda usam essa informação no cálculo do preço.</p>
+                  <div class="opcoes opcoes--2">
+                    <label class="opcao"><input type="radio" name="sexo" value="feminino"><span class="opcao__caixa">Feminino</span></label>
+                    <label class="opcao"><input type="radio" name="sexo" value="masculino"><span class="opcao__caixa">Masculino</span></label>
+                  </div>
+                  <p class="campo__erro" id="sexo-erro" hidden></p>
+                  <div class="cartao__acoes"><button class="btn btn--ok" type="submit">Continuar<svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-dir"/></svg></button></div>
+                </fieldset>
+              </form>
+            </li>
+
+            <li class="pergunta" data-p="cpf">
+              <div class="pergunta__resumo">
+                <span class="pergunta__rotulo">CPF</span>
+                <span class="pergunta__resposta"></span>
+                <button class="link-alterar" type="button" data-alterar="cpf"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-editar"/></svg>Alterar<span class="visually-hidden"> CPF</span></button>
+              </div>
+              <form class="cartao" novalidate>
+                <img class="cartao__ilustra" src="img/ilustracoes/documento.svg" alt="" width="160" height="160">
+                <fieldset class="cartao__corpo">
+                  <legend class="cartao__legenda"><span class="cartao__pergunta" tabindex="-1">Agora, informe o seu <span class="destaque">CPF</span>.</span></legend>
+                  <div class="campo campo--curto">
+                    <label class="campo__rotulo" for="cpf">CPF</label>
+                    <input class="campo__input" id="cpf" name="cpf" type="text" inputmode="numeric" autocomplete="off" data-mascara="cpf" maxlength="14" placeholder="000.000.000-00">
+                    <p class="campo__erro" id="cpf-erro" hidden></p>
+                  </div>
+                  <div class="cartao__acoes"><button class="btn btn--ok" type="submit">Continuar<svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-dir"/></svg></button></div>
+                </fieldset>
+              </form>
+            </li>
+
+            <li class="pergunta" data-p="jovens">
+              <div class="pergunta__resumo">
+                <span class="pergunta__rotulo">Motoristas de 18 a 25 anos</span>
+                <span class="pergunta__resposta"></span>
+                <button class="link-alterar" type="button" data-alterar="jovens"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-editar"/></svg>Alterar<span class="visually-hidden"> motoristas de 18 a 25 anos</span></button>
+              </div>
+              <form class="cartao" novalidate>
+                <img class="cartao__ilustra" src="img/ilustracoes/volante.svg" alt="" width="160" height="160">
+                <fieldset class="cartao__corpo" aria-describedby="jovens-dica jovens-erro">
+                  <legend class="cartao__legenda"><span class="cartao__pergunta" tabindex="-1">Quer estender a cobertura para <span class="destaque">motoristas de 18 a 25 anos</span>?</span></legend>
+                  <p class="dica" id="jovens-dica">Vale para filhos, sobrinhos ou qualquer pessoa nessa faixa que pegue o carro, mesmo de vez em quando.</p>
+                  <div class="opcoes opcoes--sim-nao">
+                    <label class="opcao opcao--sim"><input type="radio" name="jovens" value="sim"><span class="opcao__caixa"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-check"/></svg>Sim</span></label>
+                    <label class="opcao opcao--nao"><input type="radio" name="jovens" value="nao"><span class="opcao__caixa"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-x"/></svg>Não</span></label>
+                  </div>
+                  <p class="campo__erro" id="jovens-erro" hidden></p>
+                  <div class="cartao__acoes"><button class="btn btn--ok" type="submit">Continuar<svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-dir"/></svg></button></div>
+                </fieldset>
+              </form>
+            </li>
+
+            <li class="pergunta" data-p="principal">
+              <div class="pergunta__resumo">
+                <span class="pergunta__rotulo">Principal motorista</span>
+                <span class="pergunta__resposta"></span>
+                <button class="link-alterar" type="button" data-alterar="principal"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-editar"/></svg>Alterar<span class="visually-hidden"> principal motorista</span></button>
+              </div>
+              <form class="cartao" novalidate>
+                <img class="cartao__ilustra" src="img/ilustracoes/volante.svg" alt="" width="160" height="160">
+                <fieldset class="cartao__corpo" aria-describedby="principal-dica principal-erro">
+                  <legend class="cartao__legenda"><span class="cartao__pergunta" tabindex="-1"><span class="destaque" data-primeiro-nome>Você</span>, é você quem mais dirige o carro?</span></legend>
+                  <p class="dica" id="principal-dica">O principal motorista é quem usa o carro em pelo menos 85% do tempo.</p>
+                  <div class="opcoes opcoes--sim-nao">
+                    <label class="opcao opcao--sim"><input type="radio" name="principal" value="sim"><span class="opcao__caixa"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-check"/></svg>Sim, sou eu</span></label>
+                    <label class="opcao opcao--nao"><input type="radio" name="principal" value="nao"><span class="opcao__caixa"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-x"/></svg>Não, é outra pessoa</span></label>
+                  </div>
+                  <p class="campo__erro" id="principal-erro" hidden></p>
+                  <div class="cartao__acoes"><button class="btn btn--ok" type="submit">Continuar<svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-dir"/></svg></button></div>
+                </fieldset>
+              </form>
+            </li>
+
+            <li class="pergunta" data-p="motorista">
+              <div class="pergunta__resumo">
+                <span class="pergunta__rotulo">Dados do principal motorista</span>
+                <span class="pergunta__resposta"></span>
+                <button class="link-alterar" type="button" data-alterar="motorista"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-editar"/></svg>Alterar<span class="visually-hidden"> dados do principal motorista</span></button>
+              </div>
+              <form class="cartao" novalidate>
+                <img class="cartao__ilustra" src="img/ilustracoes/pessoa.svg" alt="" width="160" height="160">
+                <fieldset class="cartao__corpo">
+                  <legend class="cartao__legenda"><span class="cartao__pergunta" tabindex="-1">Conta pra gente quem é o <span class="destaque">principal motorista</span>.</span></legend>
+                  <div class="campo">
+                    <label class="campo__rotulo" for="mot-nome">Nome completo</label>
+                    <input class="campo__input" id="mot-nome" name="motNome" type="text" autocomplete="off">
+                    <p class="campo__erro" id="mot-nome-erro" hidden></p>
+                  </div>
+                  <div class="grade-2">
+                    <div class="campo">
+                      <label class="campo__rotulo" for="mot-cpf">CPF</label>
+                      <input class="campo__input" id="mot-cpf" name="motCpf" type="text" inputmode="numeric" autocomplete="off" data-mascara="cpf" maxlength="14" placeholder="000.000.000-00">
+                      <p class="campo__erro" id="mot-cpf-erro" hidden></p>
+                    </div>
+                    <div class="campo">
+                      <label class="campo__rotulo" for="mot-nascimento">Nascimento <span class="campo__formato">(dia/mês/ano)</span></label>
+                      <input class="campo__input" id="mot-nascimento" name="motNascimento" type="text" inputmode="numeric" autocomplete="off" data-mascara="data" maxlength="10" placeholder="dd/mm/aaaa">
+                      <p class="campo__erro" id="mot-nascimento-erro" hidden></p>
+                    </div>
+                  </div>
+                  <div class="grade-2">
+                    <div class="campo">
+                      <label class="campo__rotulo" for="mot-relacao">Relação com você</label>
+                      <select class="campo__input campo__select" id="mot-relacao" name="motRelacao">
+                        <option value="">Selecione</option>
+                        <option value="conjuge">Cônjuge ou companheiro(a)</option>
+                        <option value="filho">Filho(a)</option>
+                        <option value="pais">Pai ou mãe</option>
+                        <option value="outro">Outra pessoa</option>
+                      </select>
+                      <p class="campo__erro" id="mot-relacao-erro" hidden></p>
+                    </div>
+                    <div class="campo">
+                      <label class="campo__rotulo" for="mot-estado-civil">Estado civil</label>
+                      <select class="campo__input campo__select" id="mot-estado-civil" name="motEstadoCivil">
+                        <option value="">Selecione</option>
+                        <option value="solteira">Solteiro(a)</option>
+                        <option value="casada">Casado(a) ou união estável</option>
+                        <option value="divorciada">Divorciado(a)</option>
+                        <option value="viuva">Viúvo(a)</option>
+                      </select>
+                      <p class="campo__erro" id="mot-estado-civil-erro" hidden></p>
+                    </div>
+                  </div>
+                  <div class="cartao__acoes"><button class="btn btn--ok" type="submit">Continuar<svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-dir"/></svg></button></div>
+                </fieldset>
+              </form>
+            </li>
+          </ol>
+        </section>
+
+        <!-- ------------------------------------------------ ETAPA 2: VEÍCULO -->
+        <section class="etapa" data-etapa="veiculo" aria-labelledby="titulo-etapa" hidden>
+          <ol class="fio">
+            <li class="pergunta" data-p="placa">
+              <div class="pergunta__resumo">
+                <span class="pergunta__rotulo">Identificação do carro</span>
+                <span class="pergunta__resposta"></span>
+                <button class="link-alterar" type="button" data-alterar="placa"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-editar"/></svg>Alterar<span class="visually-hidden"> identificação do carro</span></button>
+              </div>
+              <form class="cartao" novalidate>
+                <img class="cartao__ilustra" src="img/ilustracoes/carro.svg" alt="" width="160" height="160">
+                <fieldset class="cartao__corpo">
+                  <legend class="cartao__legenda"><span class="cartao__pergunta" tabindex="-1"><span class="destaque" data-primeiro-nome>Você</span>, você sabe a placa do carro?</span></legend>
+                  <fieldset class="subgrupo" aria-describedby="sabePlaca-erro">
+                    <legend class="visually-hidden">Sabe a placa?</legend>
+                    <div class="opcoes opcoes--sim-nao">
+                      <label class="opcao opcao--sim"><input type="radio" name="sabePlaca" value="sim"><span class="opcao__caixa"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-check"/></svg>Sim</span></label>
+                      <label class="opcao opcao--nao"><input type="radio" name="sabePlaca" value="nao"><span class="opcao__caixa"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-x"/></svg>Não, vou escolher o modelo</span></label>
+                    </div>
+                    <p class="campo__erro" id="sabePlaca-erro" hidden></p>
+                  </fieldset>
+
+                  <div class="revela" id="bloco-placa" hidden>
+                    <div class="placa-campo">
+                      <label class="campo__rotulo" for="placa">Placa</label>
+                      <div class="placa">
+                        <span class="placa__faixa" aria-hidden="true"><span>BRASIL</span></span>
+                        <input class="placa__input" id="placa" name="placa" type="text" autocomplete="off" spellcheck="false" maxlength="8" placeholder="ABC1D23" aria-describedby="placa-dica">
+                      </div>
+                      <p class="dica" id="placa-dica">Vale placa antiga (ABC-1234) ou Mercosul (ABC1D23). Para testar, use RUM0A23.</p>
+                      <p class="campo__erro" id="placa-erro" hidden></p>
+                    </div>
+                  </div>
+
+                  <div class="revela" id="bloco-modelo" hidden>
+                    <div class="grade-2">
+                      <div class="campo">
+                        <label class="campo__rotulo" for="marca">Marca</label>
+                        <select class="campo__input campo__select" id="marca" name="marca"><option value="">Selecione</option></select>
+                        <p class="campo__erro" id="marca-erro" hidden></p>
+                      </div>
+                      <div class="campo">
+                        <label class="campo__rotulo" for="modelo">Modelo</label>
+                        <select class="campo__input campo__select" id="modelo" name="modelo" disabled><option value="">Escolha a marca primeiro</option></select>
+                        <p class="campo__erro" id="modelo-erro" hidden></p>
+                      </div>
+                    </div>
+                    <div class="grade-2">
+                      <div class="campo">
+                        <label class="campo__rotulo" for="ano-fab">Ano de fabricação</label>
+                        <select class="campo__input campo__select" id="ano-fab" name="anoFab"><option value="">Selecione</option></select>
+                        <p class="campo__erro" id="ano-fab-erro" hidden></p>
+                      </div>
+                      <div class="campo">
+                        <label class="campo__rotulo" for="ano-modelo">Ano do modelo</label>
+                        <select class="campo__input campo__select" id="ano-modelo" name="anoModelo" disabled><option value="">Escolha o ano de fabricação</option></select>
+                        <p class="campo__erro" id="ano-modelo-erro" hidden></p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="cartao__acoes"><button class="btn btn--ok" type="submit">Buscar carro<svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-dir"/></svg></button></div>
+                </fieldset>
+              </form>
+            </li>
+
+            <li class="pergunta" data-p="versao">
+              <div class="pergunta__resumo">
+                <span class="pergunta__rotulo">Seu carro</span>
+                <span class="pergunta__resposta"></span>
+                <button class="link-alterar" type="button" data-alterar="versao"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-editar"/></svg>Alterar<span class="visually-hidden"> versão do carro</span></button>
+              </div>
+              <form class="cartao" novalidate>
+                <img class="cartao__ilustra" src="img/ilustracoes/carro.svg" alt="" width="160" height="160">
+                <fieldset class="cartao__corpo" aria-describedby="versao-erro">
+                  <legend class="cartao__legenda"><span class="cartao__pergunta" tabindex="-1" id="versao-titulo">Selecione o <span class="destaque">veículo</span>.</span></legend>
+                  <div class="opcoes opcoes--lista" id="lista-versoes"></div>
+                  <p class="campo__erro" id="versao-erro" hidden></p>
+                  <div class="cartao__acoes"><button class="btn btn--ok" type="submit">Continuar<svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-dir"/></svg></button></div>
+                </fieldset>
+              </form>
+            </li>
+
+            <li class="pergunta" data-p="uso">
+              <div class="pergunta__resumo">
+                <span class="pergunta__rotulo">Uso do carro</span>
+                <span class="pergunta__resposta"></span>
+                <button class="link-alterar" type="button" data-alterar="uso"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-editar"/></svg>Alterar<span class="visually-hidden"> uso do carro</span></button>
+              </div>
+              <form class="cartao" novalidate>
+                <img class="cartao__ilustra" src="img/ilustracoes/rota.svg" alt="" width="160" height="160">
+                <fieldset class="cartao__corpo" aria-describedby="uso-erro">
+                  <legend class="cartao__legenda"><span class="cartao__pergunta" tabindex="-1">Pra que você mais <span class="destaque">usa o carro</span>?</span></legend>
+                  <div class="opcoes opcoes--3">
+                    <label class="opcao"><input type="radio" name="uso" value="lazer"><span class="opcao__caixa"><strong>Dia a dia e lazer</strong><small>Casa, mercado, viagens</small></span></label>
+                    <label class="opcao"><input type="radio" name="uso" value="trabalho"><span class="opcao__caixa"><strong>Trabalho</strong><small>Visitas a clientes, entregas</small></span></label>
+                    <label class="opcao"><input type="radio" name="uso" value="aplicativo"><span class="opcao__caixa"><strong>Motorista de aplicativo</strong><small>Corridas pagas</small></span></label>
+                  </div>
+                  <p class="campo__erro" id="uso-erro" hidden></p>
+                  <div class="cartao__acoes"><button class="btn btn--ok" type="submit">Continuar<svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-dir"/></svg></button></div>
+                </fieldset>
+              </form>
+            </li>
+
+            <li class="pergunta" data-p="endereco">
+              <div class="pergunta__resumo">
+                <span class="pergunta__rotulo">Onde o carro dorme</span>
+                <span class="pergunta__resposta"></span>
+                <button class="link-alterar" type="button" data-alterar="endereco"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-editar"/></svg>Alterar<span class="visually-hidden"> endereço onde o carro dorme</span></button>
+              </div>
+              <form class="cartao" novalidate>
+                <img class="cartao__ilustra" src="img/ilustracoes/casa-noite.svg" alt="" width="160" height="160">
+                <fieldset class="cartao__corpo">
+                  <legend class="cartao__legenda"><span class="cartao__pergunta" tabindex="-1">Qual é o <span class="destaque">CEP</span> de onde o carro dorme?</span></legend>
+                  <div class="campo campo--curto">
+                    <label class="campo__rotulo" for="cep">CEP</label>
+                    <input class="campo__input" id="cep" name="cep" type="text" inputmode="numeric" autocomplete="postal-code" data-mascara="cep" maxlength="9" placeholder="00000-000" aria-describedby="cep-dica">
+                    <p class="dica" id="cep-dica">Preenchemos o resto para você. Para testar, use 22041-011.</p>
+                    <p class="campo__erro" id="cep-erro" hidden></p>
+                  </div>
+                  <div class="revela" id="bloco-endereco" hidden>
+                    <div class="campo">
+                      <label class="campo__rotulo" for="rua">Rua</label>
+                      <input class="campo__input" id="rua" name="rua" type="text" autocomplete="address-line1">
+                      <p class="campo__erro" id="rua-erro" hidden></p>
+                    </div>
+                    <div class="grade-2">
+                      <div class="campo">
+                        <label class="campo__rotulo" for="numero">Número</label>
+                        <input class="campo__input" id="numero" name="numero" type="text" inputmode="numeric" autocomplete="off">
+                        <p class="campo__erro" id="numero-erro" hidden></p>
+                      </div>
+                      <div class="campo">
+                        <label class="campo__rotulo" for="complemento">Complemento <span class="campo__formato">(opcional)</span></label>
+                        <input class="campo__input" id="complemento" name="complemento" type="text" autocomplete="address-line2">
+                      </div>
+                    </div>
+                    <div class="grade-3">
+                      <div class="campo">
+                        <label class="campo__rotulo" for="bairro">Bairro</label>
+                        <input class="campo__input" id="bairro" name="bairro" type="text" autocomplete="off">
+                        <p class="campo__erro" id="bairro-erro" hidden></p>
+                      </div>
+                      <div class="campo">
+                        <label class="campo__rotulo" for="cidade">Cidade</label>
+                        <input class="campo__input" id="cidade" name="cidade" type="text" autocomplete="address-level2">
+                        <p class="campo__erro" id="cidade-erro" hidden></p>
+                      </div>
+                      <div class="campo">
+                        <label class="campo__rotulo" for="uf">Estado</label>
+                        <select class="campo__input campo__select" id="uf" name="uf" autocomplete="address-level1"><option value="">UF</option></select>
+                        <p class="campo__erro" id="uf-erro" hidden></p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="cartao__acoes"><button class="btn btn--ok" type="submit">Continuar<svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-dir"/></svg></button></div>
+                </fieldset>
+              </form>
+            </li>
+
+            <li class="pergunta" data-p="pernoite">
+              <div class="pergunta__resumo">
+                <span class="pergunta__rotulo">Onde o carro fica à noite</span>
+                <span class="pergunta__resposta"></span>
+                <button class="link-alterar" type="button" data-alterar="pernoite"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-editar"/></svg>Alterar<span class="visually-hidden"> onde o carro fica à noite</span></button>
+              </div>
+              <form class="cartao" novalidate>
+                <img class="cartao__ilustra" src="img/ilustracoes/garagem.svg" alt="" width="160" height="160">
+                <fieldset class="cartao__corpo" aria-describedby="pernoite-erro">
+                  <legend class="cartao__legenda"><span class="cartao__pergunta" tabindex="-1">E à noite, <span class="destaque">onde o carro fica</span>?</span></legend>
+                  <div class="opcoes opcoes--3">
+                    <label class="opcao"><input type="radio" name="pernoite" value="garagem"><span class="opcao__caixa"><strong>Garagem fechada</strong><small>Em casa ou no prédio</small></span></label>
+                    <label class="opcao"><input type="radio" name="pernoite" value="estacionamento"><span class="opcao__caixa"><strong>Estacionamento</strong><small>Pago ou do condomínio</small></span></label>
+                    <label class="opcao"><input type="radio" name="pernoite" value="rua"><span class="opcao__caixa"><strong>Na rua</strong><small>Sem portão</small></span></label>
+                  </div>
+                  <p class="campo__erro" id="pernoite-erro" hidden></p>
+                  <div class="cartao__acoes"><button class="btn btn--ok" type="submit">Continuar<svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-dir"/></svg></button></div>
+                </fieldset>
+              </form>
+            </li>
+
+            <li class="pergunta" data-p="detalhes">
+              <div class="pergunta__resumo">
+                <span class="pergunta__rotulo">Particularidades</span>
+                <span class="pergunta__resposta"></span>
+                <button class="link-alterar" type="button" data-alterar="detalhes"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-editar"/></svg>Alterar<span class="visually-hidden"> particularidades do carro</span></button>
+              </div>
+              <form class="cartao" novalidate>
+                <img class="cartao__ilustra" src="img/ilustracoes/escudo.svg" alt="" width="160" height="160">
+                <fieldset class="cartao__corpo">
+                  <legend class="cartao__legenda"><span class="cartao__pergunta" tabindex="-1">Só mais três detalhes <span class="destaque">sobre o carro</span>.</span></legend>
+                  <fieldset class="alternador" aria-describedby="financiado-erro">
+                    <legend class="alternador__rotulo">O carro é financiado?</legend>
+                    <div class="segmentos">
+                      <label><input type="radio" name="financiado" value="sim"><span>Sim</span></label>
+                      <label><input type="radio" name="financiado" value="nao"><span>Não</span></label>
+                    </div>
+                    <p class="campo__erro" id="financiado-erro" hidden></p>
+                  </fieldset>
+                  <fieldset class="alternador" aria-describedby="blindado-erro">
+                    <legend class="alternador__rotulo">É blindado?</legend>
+                    <div class="segmentos">
+                      <label><input type="radio" name="blindado" value="sim"><span>Sim</span></label>
+                      <label><input type="radio" name="blindado" value="nao"><span>Não</span></label>
+                    </div>
+                    <p class="campo__erro" id="blindado-erro" hidden></p>
+                  </fieldset>
+                  <fieldset class="alternador" aria-describedby="gas-erro">
+                    <legend class="alternador__rotulo">Tem kit gás?</legend>
+                    <div class="segmentos">
+                      <label><input type="radio" name="gas" value="sim"><span>Sim</span></label>
+                      <label><input type="radio" name="gas" value="nao"><span>Não</span></label>
+                    </div>
+                    <p class="campo__erro" id="gas-erro" hidden></p>
+                  </fieldset>
+                  <div class="cartao__acoes"><button class="btn btn--ok" type="submit">Continuar<svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-dir"/></svg></button></div>
+                </fieldset>
+              </form>
+            </li>
+
+            <li class="pergunta" data-p="vigencia">
+              <div class="pergunta__resumo">
+                <span class="pergunta__rotulo">Vigência</span>
+                <span class="pergunta__resposta"></span>
+                <button class="link-alterar" type="button" data-alterar="vigencia"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-editar"/></svg>Alterar<span class="visually-hidden"> vigência</span></button>
+              </div>
+              <form class="cartao" novalidate>
+                <img class="cartao__ilustra" src="img/ilustracoes/calendario.svg" alt="" width="160" height="160">
+                <fieldset class="cartao__corpo">
+                  <legend class="cartao__legenda"><span class="cartao__pergunta" tabindex="-1">A partir de quando o seguro deve <span class="destaque">valer</span>?</span></legend>
+                  <div class="vigencia">
+                    <div class="campo campo--curto">
+                      <label class="campo__rotulo" for="inicio">Início <span class="campo__formato">(dia/mês/ano)</span></label>
+                      <input class="campo__input" id="inicio" name="inicio" type="text" inputmode="numeric" autocomplete="off" data-mascara="data" maxlength="10" placeholder="dd/mm/aaaa" aria-describedby="inicio-dica">
+                      <p class="campo__erro" id="inicio-erro" hidden></p>
+                    </div>
+                    <span class="vigencia__ate" aria-hidden="true">até</span>
+                    <p class="vigencia__fim"><span class="vigencia__rotulo">Fim</span><span class="vigencia__data" id="fim-vigencia">dd/mm/aaaa</span></p>
+                  </div>
+                  <p class="dica" id="inicio-dica">Pode começar hoje ou em até 30 dias. O seguro vale por um ano.</p>
+                  <div class="cartao__acoes"><button class="btn btn--ok" type="submit">Ver minha cotação<svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-dir"/></svg></button></div>
+                </fieldset>
+              </form>
+            </li>
+          </ol>
+        </section>
+
+        <!-- ------------------------------------------------ ETAPA 3: COTAÇÃO -->
+        <section class="etapa etapa--cotacao" data-etapa="cotacao" aria-labelledby="titulo-etapa" hidden>
+          <div class="avaliacao">
+            <img class="avaliacao__ilustra" src="img/ilustracoes/carro.svg" alt="" width="88" height="88">
+            <div>
+              <p class="avaliacao__rotulo">Seu carro está avaliado em</p>
+              <p class="avaliacao__valor" id="fipe-valor">R$ 0</p>
+              <p class="avaliacao__nota" id="fipe-nota"></p>
+            </div>
+            <ul class="avaliacao__ajustes" id="ajustes" aria-label="O que pesou no preço"></ul>
+          </div>
+
+          <div class="planos">
+            <div class="planos__intro">
+              <div class="planos__cab">
+              <h2 class="planos__titulo">Escolha um dos <strong>5</strong> planos</h2>
+              <p class="planos__texto">Os preços já consideram o seu perfil. Você pode trocar de plano até pagar.</p>
+              <div class="planos__setas">
+                <button class="seta" type="button" id="planos-anterior"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-esq"/></svg><span class="visually-hidden">Planos anteriores</span></button>
+                <button class="seta" type="button" id="planos-proximo"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-dir"/></svg><span class="visually-hidden">Próximos planos</span></button>
+              </div>
+              </div>
+              <ul class="planos__rotulos" id="rotulos-coberturas" aria-hidden="true"></ul>
+            </div>
+            <ul class="planos__trilho" id="trilho-planos" aria-label="Planos disponíveis"></ul>
+          </div>
+
+          <details class="glossario">
+            <summary>O que cada cobertura cobre</summary>
+            <dl class="glossario__lista" id="glossario"></dl>
+          </details>
+        </section>
+
+        <!-- ------------------------------------------------ ETAPA 4: CONFIRMAÇÃO -->
+        <section class="etapa" data-etapa="confirmacao" aria-labelledby="titulo-etapa" hidden>
+          <p class="conferir__lead"><span class="destaque" data-primeiro-nome>Você</span>, confira tudo antes de pagar. Se algo estiver errado, é só alterar.</p>
+          <div class="conferir" id="conferir"></div>
+
+          <form class="cartao cartao--cobranca" id="form-cobranca" novalidate>
+            <img class="cartao__ilustra" src="img/ilustracoes/casa-noite.svg" alt="" width="160" height="160">
+            <fieldset class="cartao__corpo">
+              <legend class="cartao__legenda"><span class="cartao__pergunta" tabindex="-1" id="cobranca-titulo">O <span class="destaque">endereço de cobrança</span> é o mesmo de onde o <span class="destaque">carro dorme</span>?</span></legend>
+              <p class="endereco-atual" id="endereco-atual"></p>
+              <fieldset class="subgrupo" aria-describedby="mesmoEndereco-erro">
+                <legend class="visually-hidden">Mesmo endereço?</legend>
+                <div class="opcoes opcoes--sim-nao">
+                  <label class="opcao opcao--sim"><input type="radio" name="mesmoEndereco" value="sim"><span class="opcao__caixa"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-check"/></svg>Sim, é o mesmo</span></label>
+                  <label class="opcao opcao--nao"><input type="radio" name="mesmoEndereco" value="nao"><span class="opcao__caixa"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-x"/></svg>Não, é outro</span></label>
+                </div>
+                <p class="campo__erro" id="mesmoEndereco-erro" hidden></p>
+              </fieldset>
+              <div class="revela" id="bloco-cobranca" hidden>
+                <div class="grade-2">
+                  <div class="campo">
+                    <label class="campo__rotulo" for="cob-cep">CEP</label>
+                    <input class="campo__input" id="cob-cep" name="cobCep" type="text" inputmode="numeric" autocomplete="billing postal-code" data-mascara="cep" maxlength="9" placeholder="00000-000">
+                    <p class="campo__erro" id="cob-cep-erro" hidden></p>
+                  </div>
+                  <div class="campo">
+                    <label class="campo__rotulo" for="cob-numero">Número</label>
+                    <input class="campo__input" id="cob-numero" name="cobNumero" type="text" inputmode="numeric" autocomplete="off">
+                    <p class="campo__erro" id="cob-numero-erro" hidden></p>
+                  </div>
+                </div>
+                <div class="campo">
+                  <label class="campo__rotulo" for="cob-rua">Rua</label>
+                  <input class="campo__input" id="cob-rua" name="cobRua" type="text" autocomplete="billing address-line1">
+                  <p class="campo__erro" id="cob-rua-erro" hidden></p>
+                </div>
+                <div class="grade-2">
+                  <div class="campo">
+                    <label class="campo__rotulo" for="cob-cidade">Cidade</label>
+                    <input class="campo__input" id="cob-cidade" name="cobCidade" type="text" autocomplete="billing address-level2">
+                    <p class="campo__erro" id="cob-cidade-erro" hidden></p>
+                  </div>
+                  <div class="campo">
+                    <label class="campo__rotulo" for="cob-uf">Estado</label>
+                    <select class="campo__input campo__select" id="cob-uf" name="cobUf" autocomplete="billing address-level1"><option value="">UF</option></select>
+                    <p class="campo__erro" id="cob-uf-erro" hidden></p>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+        </section>
+
+        <!-- ------------------------------------------------ ETAPA 5: PAGAMENTO -->
+        <section class="etapa" data-etapa="pagamento" aria-labelledby="titulo-etapa" hidden>
+          <div class="pagamento">
+            <form class="cartao cartao--pagamento" id="form-pagamento" novalidate>
+              <fieldset class="cartao__corpo">
+                <legend class="cartao__legenda"><span class="cartao__pergunta" tabindex="-1">Dados do <span class="destaque">cartão de crédito</span></span></legend>
+                <p class="dica dica--cadeado"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-cadeado"/></svg>A mensalidade é cobrada todo mês no cartão, sem ocupar o limite do ano inteiro.</p>
+                <div class="campo">
+                  <label class="campo__rotulo" for="cartao-numero">Número do cartão</label>
+                  <input class="campo__input" id="cartao-numero" name="cartaoNumero" type="text" inputmode="numeric" autocomplete="cc-number" data-mascara="cartao" maxlength="19" placeholder="0000 0000 0000 0000" aria-describedby="bandeira-texto">
+                  <p class="dica" id="bandeira-texto" aria-live="polite">A bandeira aparece sozinha. Para testar, use 4111 1111 1111 1111.</p>
+                  <p class="campo__erro" id="cartao-numero-erro" hidden></p>
+                </div>
+                <div class="campo">
+                  <label class="campo__rotulo" for="cartao-nome">Nome impresso no cartão</label>
+                  <input class="campo__input" id="cartao-nome" name="cartaoNome" type="text" autocomplete="cc-name" spellcheck="false">
+                  <p class="campo__erro" id="cartao-nome-erro" hidden></p>
+                </div>
+                <div class="grade-2">
+                  <div class="campo">
+                    <label class="campo__rotulo" for="cartao-validade">Validade <span class="campo__formato">(mês/ano)</span></label>
+                    <input class="campo__input" id="cartao-validade" name="cartaoValidade" type="text" inputmode="numeric" autocomplete="cc-exp" data-mascara="validade" maxlength="5" placeholder="MM/AA">
+                    <p class="campo__erro" id="cartao-validade-erro" hidden></p>
+                  </div>
+                  <div class="campo">
+                    <label class="campo__rotulo" for="cartao-cvv">Código de segurança</label>
+                    <input class="campo__input" id="cartao-cvv" name="cartaoCvv" type="text" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="000" aria-describedby="cvv-dica">
+                    <p class="dica" id="cvv-dica">São os 3 ou 4 números no verso.</p>
+                    <p class="campo__erro" id="cartao-cvv-erro" hidden></p>
+                  </div>
+                </div>
+                <div class="aceite">
+                  <input type="checkbox" id="aceite" name="aceite">
+                  <label for="aceite">Li e concordo com as condições gerais do seguro e autorizo a cobrança mensal no cartão.</label>
+                  <p class="campo__erro" id="aceite-erro" hidden></p>
+                </div>
+              </fieldset>
+            </form>
+
+            <aside class="pagamento__lado" aria-label="Resumo do pagamento">
+              <div class="preco-caixa">
+                <p class="preco-caixa__plano" id="pag-plano">Plano</p>
+                <p class="preco"><span class="preco__moeda">R$</span><span class="preco__inteiro" id="pag-inteiro">0</span><span class="preco__centavos" id="pag-centavos">,00</span><span class="preco__periodo">por mês</span></p>
+                <p class="preco-caixa__vigencia"><span>Vigência</span> <span id="pag-vigencia"></span></p>
+                <p class="preco-caixa__carro" id="pag-carro"></p>
+              </div>
+              <div class="cartao-cena" aria-hidden="true">
+                <div class="cartao-3d" id="cartao-3d">
+                  <div class="cartao-3d__frente">
+                    <span class="cartao-3d__chip"></span>
+                    <span class="cartao-3d__bandeira" id="cv-bandeira">Bandeira</span>
+                    <span class="cartao-3d__numero" id="cv-numero">0000 0000 0000 0000</span>
+                    <span class="cartao-3d__validade"><small>Validade</small> <span id="cv-validade">00/00</span></span>
+                    <span class="cartao-3d__nome" id="cv-nome">Nome do titular</span>
+                  </div>
+                  <div class="cartao-3d__verso">
+                    <span class="cartao-3d__tarja"></span>
+                    <span class="cartao-3d__cvv"><small>CVV</small> <span id="cv-cvv">000</span></span>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+      </div>
+      </main>
+
+      <footer class="rodape">
+        <div class="rodape__interno">
+          <span class="rodape__marcas">
+            <span class="onda"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-onda"/></svg>onda</span>
+            <span class="rodape__x" aria-hidden="true">+</span>
+            <span class="marca marca--mini"><img class="marca__simbolo" src="img/favicon.svg" alt="" width="22" height="22"><span class="marca__nome">Rumo Seguros</span></span>
+          </span>
+          <div class="rodape__acoes">
+            <button class="btn btn--fantasma" type="button" id="btn-anterior"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-esq"/></svg>Etapa anterior</button>
+            <button class="btn btn--proxima" type="button" id="btn-proxima"><span id="btn-proxima-texto">Próxima etapa</span><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-seta-dir"/></svg></button>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- ============================================================ DIÁLOGOS -->
+    <dialog class="dialogo" id="dlg-jovens" aria-labelledby="dlg-jovens-titulo" data-obrigatorio>
+      <form class="dialogo__form" id="form-jovens" novalidate>
+        <div class="dialogo__cabecalho">
+          <span class="dialogo__selo dialogo__selo--alerta"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-alerta"/></svg></span>
+          <h2 class="dialogo__titulo" id="dlg-jovens-titulo">Combinado, sem motoristas de 18 a 25 anos</h2>
+        </div>
+        <div class="dialogo__corpo">
+          <p>Isso deixa o seguro mais barato. Só precisamos que você confirme que entendeu a regra.</p>
+          <div class="aceite">
+            <input type="checkbox" id="ciente-jovens" name="cienteJovens">
+            <label for="ciente-jovens">Estou ciente de que não haverá cobertura se o carro estiver com alguém de 18 a 25 anos que não seja o principal motorista.</label>
+            <p class="campo__erro" id="ciente-jovens-erro" hidden></p>
+          </div>
+        </div>
+        <div class="dialogo__acoes">
+          <button class="btn btn--fantasma" type="button" id="jovens-mudar">Mudar para sim</button>
+          <button class="btn btn--primario" type="submit">Confirmar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialogo" id="dlg-personalizar" aria-labelledby="dlg-personalizar-titulo">
+      <form class="dialogo__form" id="form-personalizar" novalidate>
+        <div class="dialogo__cabecalho">
+          <span class="dialogo__selo"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-escudo"/></svg></span>
+          <h2 class="dialogo__titulo" id="dlg-personalizar-titulo">Monte o seu plano</h2>
+          <button class="dialogo__fechar" type="button" data-fechar><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-x"/></svg><span class="visually-hidden">Fechar</span></button>
+        </div>
+        <div class="dialogo__corpo">
+          <p>Roubo, furto e incêndio já vêm incluídos. Escolha o resto e veja o preço mudar na hora.</p>
+          <div class="personalizar" id="personalizar-campos"></div>
+        </div>
+        <div class="dialogo__acoes dialogo__acoes--preco">
+          <p class="preco preco--mini" aria-live="polite"><span class="preco__moeda">R$</span><span class="preco__inteiro" id="pers-inteiro">0</span><span class="preco__centavos" id="pers-centavos">,00</span><span class="preco__periodo">por mês</span></p>
+          <button class="btn btn--primario" type="submit">Escolher este plano</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialogo" id="dlg-login" aria-labelledby="dlg-login-titulo">
+      <div class="dialogo__cabecalho">
+        <span class="dialogo__selo"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-cadeado"/></svg></span>
+        <h2 class="dialogo__titulo" id="dlg-login-titulo">Para concluir, entre na sua conta</h2>
+        <button class="dialogo__fechar" type="button" data-fechar><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-x"/></svg><span class="visually-hidden">Fechar</span></button>
+      </div>
+      <div class="dialogo__corpo">
+        <button class="btn btn--onda" type="button" id="entrar-onda"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-onda"/></svg>Continuar com a conta onda</button>
+        <p class="separador"><span>ou use seu e-mail</span></p>
+
+        <form id="form-login" novalidate>
+          <div class="campo">
+            <label class="campo__rotulo" for="login-email">E-mail</label>
+            <input class="campo__input" id="login-email" name="loginEmail" type="email" autocomplete="username" spellcheck="false">
+            <p class="campo__erro" id="login-email-erro" hidden></p>
+          </div>
+          <div class="campo">
+            <label class="campo__rotulo" for="login-senha">Senha</label>
+            <input class="campo__input" id="login-senha" name="loginSenha" type="password" autocomplete="current-password" aria-describedby="login-senha-dica">
+            <p class="dica" id="login-senha-dica">No protótipo, qualquer senha com 6 caracteres ou mais funciona.</p>
+            <p class="campo__erro" id="login-senha-erro" hidden></p>
+          </div>
+          <button class="btn btn--primario btn--largo" type="submit">Entrar</button>
+          <button class="btn-link" type="button" id="ir-cadastro">Ainda não tenho conta</button>
+        </form>
+
+        <form id="form-cadastro" novalidate hidden>
+          <div class="campo">
+            <label class="campo__rotulo" for="cad-nome">Nome completo</label>
+            <input class="campo__input" id="cad-nome" name="cadNome" type="text" autocomplete="name">
+            <p class="campo__erro" id="cad-nome-erro" hidden></p>
+          </div>
+          <div class="campo">
+            <label class="campo__rotulo" for="cad-email">E-mail</label>
+            <input class="campo__input" id="cad-email" name="cadEmail" type="email" autocomplete="email" spellcheck="false">
+            <p class="campo__erro" id="cad-email-erro" hidden></p>
+          </div>
+          <div class="campo">
+            <label class="campo__rotulo" for="cad-senha">Crie uma senha</label>
+            <input class="campo__input" id="cad-senha" name="cadSenha" type="password" autocomplete="new-password" aria-describedby="cad-senha-dica">
+            <p class="dica" id="cad-senha-dica">Pelo menos 8 caracteres, com letras e números.</p>
+            <p class="campo__erro" id="cad-senha-erro" hidden></p>
+          </div>
+          <button class="btn btn--primario btn--largo" type="submit">Criar conta e continuar</button>
+          <button class="btn-link" type="button" id="ir-login">Já tenho conta</button>
+        </form>
+      </div>
+    </dialog>
+
+    <dialog class="dialogo dialogo--sucesso" id="dlg-sucesso" aria-labelledby="dlg-sucesso-titulo" data-obrigatorio>
+      <div class="sucesso">
+        <div class="sucesso__cena" aria-hidden="true">
+          <span class="sucesso__confete"></span>
+          <img class="sucesso__ilustra" src="img/ilustracoes/contratado.svg" alt="" width="240" height="150">
+        </div>
+        <h2 class="sucesso__titulo" id="dlg-sucesso-titulo" tabindex="-1">Seguro contratado com <strong>sucesso!</strong></h2>
+        <p class="sucesso__texto" id="sucesso-texto"></p>
+        <dl class="sucesso__dados">
+          <div><dt>Apólice</dt><dd id="sucesso-apolice"></dd></div>
+          <div><dt>Vigência</dt><dd id="sucesso-vigencia"></dd></div>
+          <div><dt>Mensalidade</dt><dd id="sucesso-mensal"></dd></div>
+        </dl>
+        <div class="sucesso__acoes">
+          <button class="btn btn--claro" type="button" id="baixar-comprovante"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-download"/></svg>Baixar comprovante</button>
+          <button class="btn btn--contorno-claro" type="button" id="ir-apolices">Ver minhas apólices</button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="dialogo" id="dlg-apolice" aria-labelledby="dlg-apolice-titulo">
+      <div class="dialogo__cabecalho">
+        <span class="dialogo__selo"><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-documento"/></svg></span>
+        <h2 class="dialogo__titulo" id="dlg-apolice-titulo">Apólice</h2>
+        <button class="dialogo__fechar" type="button" data-fechar><svg class="icon" aria-hidden="true" focusable="false"><use href="img/icons.svg#i-x"/></svg><span class="visually-hidden">Fechar</span></button>
+      </div>
+      <div class="dialogo__corpo">
+        <dl class="ficha" id="ficha-apolice"></dl>
+        <p class="dica">Em caso de batida ou roubo, ligue 0800 000 0000 (número fictício) ou abra o aviso pelo app.</p>
+      </div>
+      <div class="dialogo__acoes">
+        <button class="btn btn--primario" type="button" data-fechar>Fechar</button>
+      </div>
+    </dialog>
+
+    <div class="visually-hidden" id="anuncios" role="status" aria-live="polite"></div>
+
+    <script src="js/common.js"></script>
+    <script src="js/dados.js"></script>
+    <script src="js/cotacao.js"></script>
+  </body>
+</html>

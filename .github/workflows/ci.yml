@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  html:
+    name: Validar HTML
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: HTMLHint
+        run: npx --yes htmlhint@1 "*.html"
+      - name: Sem scripts/handlers inline (CSP)
+        run: |
+          if grep -nE '<script>|<script type="text/javascript">|\son(click|change|keypress|load|submit)=' *.html; then
+            echo "::error::Há scripts ou handlers inline — mova para js/."
+            exit 1
+          fi
+      - name: Sem estilos inline (CSP)
+        run: |
+          if grep -nE '\sstyle=|<style' *.html; then
+            echo "::error::Há estilos inline — a CSP bloqueia; mova para css/app.css."
+            exit 1
+          fi
